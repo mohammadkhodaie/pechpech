@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_pechpechonweb" default="compile.module.pechpechonweb">
+  <dirname property="module.pechpechonweb.basedir" file="${ant.file.module_pechpechonweb}"/>
+  
+  <property name="module.jdk.home.pechpechonweb" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.pechpechonweb" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.pechpechonweb" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.pechpechonweb" value="-encoding UTF-8 -source 13 -target 13 ${compiler.args}"/>
+  
+  <property name="pechpechonweb.output.dir" value="${module.pechpechonweb.basedir}/out/production/PechPechOnWeb"/>
+  <property name="pechpechonweb.testoutput.dir" value="${module.pechpechonweb.basedir}/out/test/PechPechOnWeb"/>
+  
+  <path id="pechpechonweb.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="pechpechonweb.module.production.classpath">
+    <path refid="${module.jdk.classpath.pechpechonweb}"/>
+    <path refid="library.google-collections-0.8.classpath"/>
+  </path>
+  
+  <path id="pechpechonweb.runtime.production.module.classpath">
+    <pathelement location="${pechpechonweb.output.dir}"/>
+    <path refid="library.google-collections-0.8.classpath"/>
+  </path>
+  
+  <path id="pechpechonweb.module.classpath">
+    <path refid="${module.jdk.classpath.pechpechonweb}"/>
+    <pathelement location="${pechpechonweb.output.dir}"/>
+    <path refid="library.google-collections-0.8.classpath"/>
+  </path>
+  
+  <path id="pechpechonweb.runtime.module.classpath">
+    <pathelement location="${pechpechonweb.testoutput.dir}"/>
+    <pathelement location="${pechpechonweb.output.dir}"/>
+    <path refid="library.google-collections-0.8.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.pechpechonweb">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.pechpechonweb">
+    <patternset refid="excluded.from.module.pechpechonweb"/>
+  </patternset>
+  
+  <path id="pechpechonweb.module.sourcepath">
+    <dirset dir="${module.pechpechonweb.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.pechpechonweb" depends="compile.module.pechpechonweb.production,compile.module.pechpechonweb.tests" description="Compile module PechPechOnWeb"/>
+  
+  <target name="compile.module.pechpechonweb.production" depends="register.custom.compilers" description="Compile module PechPechOnWeb; production classes">
+    <mkdir dir="${pechpechonweb.output.dir}"/>
+    <javac2 destdir="${pechpechonweb.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.pechpechonweb}/javac">
+      <compilerarg line="${compiler.args.pechpechonweb}"/>
+      <bootclasspath refid="pechpechonweb.module.bootclasspath"/>
+      <classpath refid="pechpechonweb.module.production.classpath"/>
+      <src refid="pechpechonweb.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.pechpechonweb"/>
+    </javac2>
+    
+    <copy todir="${pechpechonweb.output.dir}">
+      <fileset dir="${module.pechpechonweb.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.pechpechonweb.tests" depends="register.custom.compilers,compile.module.pechpechonweb.production" description="compile module PechPechOnWeb; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.pechpechonweb" description="cleanup module">
+    <delete dir="${pechpechonweb.output.dir}"/>
+    <delete dir="${pechpechonweb.testoutput.dir}"/>
+  </target>
+</project>
